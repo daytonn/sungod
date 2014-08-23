@@ -99,7 +99,7 @@ function sg {
 
   if [[ "$1" == "migration" ]] ||
      [[ "$1" == "mg" ]]; then
-    __sg_migration
+    __sg_migration "$@"
   fi
 
   if [[ "$1" == "assets" ]] ||
