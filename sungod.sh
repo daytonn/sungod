@@ -14,6 +14,7 @@ function __sg_usage {
   echo "  sungod assets [-w]        (gulp build, [-w gulp watch])"
   echo "  sungod migrate            (mix ecto.migrate Repo)"
   echo "  sungod migration [table]  (mix ecto.gen.migration Repo [table])"
+  echo "  sungod rollback [-a]      (mix ecto.rollback Repo, [-a --all])"
   echo ""
   echo "  Or use the handy shortcut sg"
   echo ""
@@ -73,7 +74,18 @@ function __sg_migration {
 }
 
 function __sg_rollback {
-  mix ecto.rollback Repo --all
+  if [[ "$1" == "-a" ]] ||
+     [[ "$1" == "--all" ]] ||
+     [[ "$2" == "-a" ]] ||
+     [[ "$2" == "--all" ]]; then
+
+    mix ecto.rollback Repo --all
+
+  else
+
+    mix ecto.rollback Repo
+
+  fi
 }
 
 function sungod {
@@ -107,8 +119,10 @@ function sg {
   fi
 
   if [[ "$1" == "rollback" ]] ||
-     [[ "$1" == "rb" ]]; then
-    __sg_rollback
+     [[ "$1" == "rb" ]] ||
+     [[ "$2" == "rollback" ]] ||
+     [[ "$2" == "rb" ]]; then
+    __sg_rollback "$@"
   fi
 
   if [[ "$1" == "assets" ]] ||
