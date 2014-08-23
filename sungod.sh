@@ -39,7 +39,7 @@ function __sg_server {
 }
 
 function __sg_new {
-  local appname="$2"
+  local appname="$1"
   local install_location="$PWD/$appname"
 
   __sg_cdpheonix
@@ -64,12 +64,16 @@ function __sg_migrate {
 }
 
 function __sg_migration {
-  if [[ -n "$2" ]]; then
-    local table="$2"
+  if [[ -n "$1" ]]; then
+    local table="$1"
     mix ecto.gen.migration Repo "$table"
   else
     echo "table not defined!"
   fi
+}
+
+function __sg_rollback {
+  mix ecto.rollback Repo --all
 }
 
 function sungod {
@@ -79,7 +83,7 @@ function sungod {
 function sg {
   if [[ "$1" == "new" ]] ||
      [[ "$1" == "n" ]]; then
-    __sg_new "$@"
+    __sg_new "$2"
   fi
 
   if [[ "$1" == "install" ]] ||
@@ -99,7 +103,12 @@ function sg {
 
   if [[ "$1" == "migration" ]] ||
      [[ "$1" == "mg" ]]; then
-    __sg_migration "$@"
+    __sg_migration "$2"
+  fi
+
+  if [[ "$1" == "rollback" ]] ||
+     [[ "$1" == "rb" ]]; then
+    __sg_rollback
   fi
 
   if [[ "$1" == "assets" ]] ||
