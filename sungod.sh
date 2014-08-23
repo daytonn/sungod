@@ -8,17 +8,21 @@ function __sg_usage {
   echo ""
   echo "  Sungod runs common phoenix development tasks"
   echo ""
-  echo "  sungod new [application] (mix pheonix.new [application] $PWD/[application] )"
-  echo "  sungod server (mix phoenix.server)"
-  echo "  sungod install (mix do deps.get, compile)"
-  echo "  sungod assets [-w] (gulp build, [-w gulp watch])"
+  echo "  sungod new [application]  (mix pheonix.new [application] $PWD/[application] )"
+  echo "  sungod server             (mix phoenix.server)"
+  echo "  sungod install            (mix do deps.get, compile)"
+  echo "  sungod assets [-w]        (gulp build, [-w gulp watch])"
+  echo "  sungod migrate            (mix ecto.migrate Repo)"
+  echo "  sungod migration [table]  (mix ecto.gen.migration Repo [table])"
   echo ""
   echo "  Or use the handy shortcut sg"
   echo ""
-  echo "  sg n (new)"
-  echo "  sg s (server)"
-  echo "  sg i (install)"
-  echo "  sg a (assets)"
+  echo "  sg  n (new)"
+  echo "  sg  s (server)"
+  echo "  sg  i (install)"
+  echo "  sg  a (assets)"
+  echo "  sg  m (migrate)"
+  echo "  sg mg (migration)"
   echo ""
 }
 
@@ -55,6 +59,19 @@ function __sg_gulp_watch {
   gulp watch
 }
 
+function __sg_migrate {
+  mix ecto.migrate Repo
+}
+
+function __sg_migration {
+  if [[ -n "$1" ]]; then
+    local table="$1"
+    mix ecto.gen.migration Repo "$table"
+  else
+    echo "table not defined!"
+  fi
+}
+
 function sungod {
   sg "$@"
 }
@@ -75,9 +92,9 @@ function sg {
     __sg_server
   fi
 
-  if [[ "$1" == "server" ]] ||
-     [[ "$1" == "s" ]]; then
-    __sg_server
+  if [[ "$1" == "migrate" ]] ||
+     [[ "$1" == "m" ]]; then
+    __sg_migrate
   fi
 
   if [[ "$1" == "assets" ]] ||
