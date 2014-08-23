@@ -97,6 +97,11 @@ function sg {
     __sg_migrate
   fi
 
+  if [[ "$1" == "migration" ]] ||
+     [[ "$1" == "mg" ]]; then
+    __sg_migration
+  fi
+
   if [[ "$1" == "assets" ]] ||
      [[ "$1" == "a" ]] ||
      [[ "$2" == "assets" ]] ||
