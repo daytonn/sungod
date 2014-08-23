@@ -64,8 +64,8 @@ function __sg_migrate {
 }
 
 function __sg_migration {
-  if [[ -n "$1" ]]; then
-    local table="$1"
+  if [[ -n "$2" ]]; then
+    local table="$2"
     mix ecto.gen.migration Repo "$table"
   else
     echo "table not defined!"
