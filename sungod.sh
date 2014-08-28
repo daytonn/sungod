@@ -95,34 +95,46 @@ function sungod {
 function sg {
   if [[ "$1" == "new" ]] ||
      [[ "$1" == "n" ]]; then
+
     __sg_new "$2"
+
   fi
 
   if [[ "$1" == "install" ]] ||
      [[ "$1" == "i" ]]; then
+
     __sg_install
+
   fi
 
   if [[ "$1" == "server" ]] ||
      [[ "$1" == "s" ]]; then
+
     __sg_server
+
   fi
 
   if [[ "$1" == "migrate" ]] ||
      [[ "$1" == "m" ]]; then
+
     __sg_migrate
+
   fi
 
   if [[ "$1" == "migration" ]] ||
      [[ "$1" == "mg" ]]; then
+
     __sg_migration "$2"
+
   fi
 
   if [[ "$1" == "rollback" ]] ||
      [[ "$1" == "rb" ]] ||
      [[ "$2" == "rollback" ]] ||
      [[ "$2" == "rb" ]]; then
+
     __sg_rollback "$@"
+
   fi
 
   if [[ "$1" == "assets" ]] ||
@@ -140,9 +152,5 @@ function sg {
       __sg_gulp_build
 
     fi
-  fi
-
-  if [[ -z "$1" ]]; then
-    __sg_usage
   fi
 }
