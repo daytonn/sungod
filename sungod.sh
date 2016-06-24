@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 __sg_usage() {
   echo ""
   echo "Usage:"
@@ -28,26 +30,18 @@ __sg_install() {
 }
 
 __sg_server() {
-  mix phoenix.start
+  mix phoenix.server
 }
 
 __sg_new() {
   local appname="$1"
   local install_location="$PWD/$appname"
 
-  mix phoenix.new "$appname"
+  mix phoenix.new "$install_location" --app "$appname"
   cd "$install_location" || exit
 
   __sg_install
   __sg_server
-}
-
-__sg_gulp_build() {
-  gulp build
-}
-
-__sg_gulp_watch() {
-  gulp watch
 }
 
 __sg_migrate() {
