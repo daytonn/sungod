@@ -1,6 +1,4 @@
-if [ -z "$SUNGOD_PHEONIX_ROOT" ]; then
-  SUNGOD_PHEONIX_ROOT="$HOME/Development/phoenix"
-fi
+#!/usr/bin/env bash
 
 __sg_usage() {
   echo ""
@@ -32,26 +30,18 @@ __sg_install() {
 }
 
 __sg_server() {
-  mix phoenix.start
+  mix phoenix.server
 }
 
 __sg_new() {
   local appname="$1"
   local install_location="$PWD/$appname"
 
-  mix phoenix.new "$appname"
+  mix phoenix.new "$install_location" --app "$appname"
   cd "$install_location" || exit
 
   __sg_install
   __sg_server
-}
-
-__sg_gulp_build() {
-  gulp build
-}
-
-__sg_gulp_watch() {
-  gulp watch
 }
 
 __sg_migrate() {
@@ -74,11 +64,8 @@ __sg_rollback() {
      [[ "$2" == "--all" ]]; then
 
     mix ecto.rollback Repo --all
-
   else
-
     mix ecto.rollback Repo
-
   fi
 }
 
@@ -87,64 +74,33 @@ sungod() {
 }
 
 sg() {
-  if [[ "$1" == "new" ]] ||
-     [[ "$1" == "n" ]]; then
+  if [[ -z "$1" ]]; then
+    __sg_usage
+  else
+    if [[ "$1" == "new" ]] || [[ "$1" == "n" ]]; then
+      __sg_new "$2"
+    fi
 
-    __sg_new "$2"
+    if [[ "$1" == "install" ]] || [[ "$1" == "i" ]]; then
+      __sg_install
+    fi
 
-  fi
+    if [[ "$1" == "server" ]] || [[ "$1" == "s" ]] ||
+       [[ "$1" == "serve" ]] || [[ "$1" == "start" ]]; then
+      __sg_server
+    fi
 
-  if [[ "$1" == "install" ]] ||
-     [[ "$1" == "i" ]]; then
+    if [[ "$1" == "migrate" ]] || [[ "$1" == "m" ]]; then
+      __sg_migrate
+    fi
 
-    __sg_install
+    if [[ "$1" == "migration" ]] || [[ "$1" == "mg" ]]; then
+      __sg_migration "$2"
+    fi
 
-  fi
-
-  if [[ "$1" == "server" ]] ||
-     [[ "$1" == "s" ]]; then
-
-    __sg_server
-
-  fi
-
-  if [[ "$1" == "migrate" ]] ||
-     [[ "$1" == "m" ]]; then
-
-    __sg_migrate
-
-  fi
-
-  if [[ "$1" == "migration" ]] ||
-     [[ "$1" == "mg" ]]; then
-
-    __sg_migration "$2"
-
-  fi
-
-  if [[ "$1" == "rollback" ]] ||
-     [[ "$1" == "rb" ]] ||
-     [[ "$2" == "rollback" ]] ||
-     [[ "$2" == "rb" ]]; then
-
-    __sg_rollback "$@"
-
-  fi
-
-  if [[ "$1" == "assets" ]] ||
-     [[ "$1" == "a" ]] ||
-     [[ "$2" == "assets" ]] ||
-     [[ "$2" == "a" ]]; then
-
-    if [[ "$1" == "-w" ]] ||
-       [[ "$2" == "-w" ]]; then
-
-      __sg_gulp_watch
-
-    else
-
-      __sg_gulp_build
-
+    if [[ "$1" == "rollback" ]] || [[ "$1" == "rb" ]] ||
+       [[ "$2" == "rollback" ]] || [[ "$2" == "rb" ]]; then
+      __sg_rollback "$@"
     fi
   fi
 }
