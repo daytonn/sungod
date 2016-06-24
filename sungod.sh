@@ -1,7 +1,3 @@
-if [ -z "$SUNGOD_PHEONIX_ROOT" ]; then
-  SUNGOD_PHEONIX_ROOT="$HOME/Development/phoenix"
-fi
-
 __sg_usage() {
   echo ""
   echo "Usage:"
@@ -67,18 +63,18 @@ __sg_migration() {
   fi
 }
 
+__sg_routes() {
+  mix phoenix.routes
+}
+
 __sg_rollback() {
   if [[ "$1" == "-a" ]] ||
      [[ "$1" == "--all" ]] ||
      [[ "$2" == "-a" ]] ||
      [[ "$2" == "--all" ]]; then
-
     mix ecto.rollback Repo --all
-
   else
-
     mix ecto.rollback Repo
-
   fi
 }
 
@@ -87,64 +83,31 @@ sungod() {
 }
 
 sg() {
-  if [[ "$1" == "new" ]] ||
-     [[ "$1" == "n" ]]; then
-
+  if [[ "$1" == "new" ]] || [[ "$1" == "n" ]]; then
     __sg_new "$2"
-
   fi
 
-  if [[ "$1" == "install" ]] ||
-     [[ "$1" == "i" ]]; then
-
+  if [[ "$1" == "install" ]] || [[ "$1" == "i" ]]; then
     __sg_install
-
   fi
 
-  if [[ "$1" == "server" ]] ||
-     [[ "$1" == "s" ]]; then
-
+  if [[ "$1" == "server" ]] || [[ "$1" == "s" ]]; then
     __sg_server
-
   fi
 
-  if [[ "$1" == "migrate" ]] ||
-     [[ "$1" == "m" ]]; then
-
+  if [[ "$1" == "migrate" ]] || [[ "$1" == "m" ]]; then
     __sg_migrate
-
   fi
 
-  if [[ "$1" == "migration" ]] ||
-     [[ "$1" == "mg" ]]; then
-
+  if [[ "$1" == "migration" ]] || [[ "$1" == "mg" ]]; then
     __sg_migration "$2"
-
   fi
 
-  if [[ "$1" == "rollback" ]] ||
-     [[ "$1" == "rb" ]] ||
-     [[ "$2" == "rollback" ]] ||
-     [[ "$2" == "rb" ]]; then
+  if [[ "$1" == "routes" ]] || [[ "$1" == "r" ]]; then
+    __sg_routes
+  fi
 
+  if [[ "$1" == "rollback" ]] || [[ "$1" == "rb" ]] || [[ "$2" == "rollback" ]] || [[ "$2" == "rb" ]]; then
     __sg_rollback "$@"
-
-  fi
-
-  if [[ "$1" == "assets" ]] ||
-     [[ "$1" == "a" ]] ||
-     [[ "$2" == "assets" ]] ||
-     [[ "$2" == "a" ]]; then
-
-    if [[ "$1" == "-w" ]] ||
-       [[ "$2" == "-w" ]]; then
-
-      __sg_gulp_watch
-
-    else
-
-      __sg_gulp_build
-
-    fi
   fi
 }
