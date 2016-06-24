@@ -2,13 +2,13 @@ if [ -z "$SUNGOD_PHEONIX_ROOT" ]; then
   SUNGOD_PHEONIX_ROOT="$HOME/Development/phoenix"
 fi
 
-function __sg_usage {
+__sg_usage() {
   echo ""
   echo "Usage:"
   echo ""
   echo "  Sungod runs common phoenix development tasks"
   echo ""
-  echo "  sungod new [application]  (mix pheonix.new [application] $PWD/[application] )"
+  echo "  sungod new [application]  (mix pheonix.new application)"
   echo "  sungod server             (mix phoenix.server)"
   echo "  sungod install            (mix do deps.get, compile)"
   echo "  sungod assets [-w]        (gulp build, [-w gulp watch])"
@@ -27,44 +27,38 @@ function __sg_usage {
   echo ""
 }
 
-function __sg_cdpheonix {
-  cd "$SUNGOD_PHEONIX_ROOT"
+__sg_install() {
+  mix "do" deps.get, compile
 }
 
-function __sg_install {
-  mix do deps.get, compile
-}
-
-function __sg_server {
+__sg_server() {
   mix phoenix.start
 }
 
-function __sg_new {
+__sg_new() {
   local appname="$1"
   local install_location="$PWD/$appname"
 
-  __sg_cdpheonix
-
-  mix phoenix.new "$appname" "$install_location"
-  cd "$install_location"
+  mix phoenix.new "$appname"
+  cd "$install_location" || exit
 
   __sg_install
   __sg_server
 }
 
-function __sg_gulp_build {
+__sg_gulp_build() {
   gulp build
 }
 
-function __sg_gulp_watch {
+__sg_gulp_watch() {
   gulp watch
 }
 
-function __sg_migrate {
+__sg_migrate() {
   mix ecto.migrate Repo
 }
 
-function __sg_migration {
+__sg_migration() {
   if [[ -n "$1" ]]; then
     local table="$1"
     mix ecto.gen.migration Repo "$table"
@@ -73,7 +67,7 @@ function __sg_migration {
   fi
 }
 
-function __sg_rollback {
+__sg_rollback() {
   if [[ "$1" == "-a" ]] ||
      [[ "$1" == "--all" ]] ||
      [[ "$2" == "-a" ]] ||
@@ -88,11 +82,11 @@ function __sg_rollback {
   fi
 }
 
-function sungod {
+sungod() {
   sg "$@"
 }
 
-function sg {
+sg() {
   if [[ "$1" == "new" ]] ||
      [[ "$1" == "n" ]]; then
 
