@@ -81,7 +81,7 @@ sg() {
       __sg_new "$2"
     fi
 
-    if [[ "$1" == "install" ]] || [[ "$1" == "i" ]]; then
+    if [[ "$1" == "install" ]] || [[ "$1" == "i" ]] || [[ "$1" == "deps" ]]; then
       __sg_install
     fi
 
